@@ -15,7 +15,7 @@ class ServiceProvider extends LaravelServiceProvider
     public function boot()
     {
         if ($this->app->runningInConsole()) {
-            $this->publishes([__DIR__ . '/../../config/config.php' => config_path('order.php')]);
+            $this->publishes([__DIR__ . '/../../config/config.php' => config_path('order.php'), 'order']);
             $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations/');
         }
     }

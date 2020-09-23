@@ -217,6 +217,24 @@ class Order
     }
 
     /**
+     * Notes: 设置订单收货地址
+     * @Author: <C.Jason>
+     * @Date  : 2019/11/21 4:29 下午
+     * @param $order
+     */
+    protected function setOrderAddress($order, $address)
+    {
+        $order->express()->create([
+            'name'        => $address->getName(),
+            'mobile'      => $address->getMobile(),
+            'province_id' => $address->getProvinceId(),
+            'city_id'     => $address->getCityId(),
+            'district_id' => $address->getDistrictId(),
+            'address'     => $address->getAddress(),
+        ]);
+    }
+
+    /**
      * Notes: 魔术方法，获取一些参数
      * @Author: <C.Jason>
      * @Date  : 2019/11/22 2:34 下午

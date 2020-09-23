@@ -55,15 +55,9 @@ class Item implements Arrayable, Jsonable
         return [
             'item_type' => $this->item_type,
             'item_id'   => $this->item_id,
-            'seller_id' => $this->seller_id,
             'qty'       => $this->qty,
             'price'     => $this->price,
         ];
-    }
-
-    public function toJson($options = 0)
-    {
-        return json_encode($this->toArray(), $options);
     }
 
 }
