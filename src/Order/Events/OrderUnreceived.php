@@ -2,17 +2,10 @@
 
 namespace Jason\Order\Events;
 
-use Jason\Order\Models\Order;
-
 /**
  * 未收到货物
  */
-class OrderUnreceived
+class OrderUnreceived extends OrderEvent
 {
-    public $order;
 
-    public function __construct(Order $order)
-    {
-        $this->order = $order;
-    }
 }

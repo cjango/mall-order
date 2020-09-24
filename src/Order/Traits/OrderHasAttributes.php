@@ -11,11 +11,11 @@ trait OrderHasAttributes
      * Notes: 设置订单分状态
      * 订单状态;金钱状态;发货状态;评论状态，
      * @Author: <C.Jason>
-     * @Date: 2019/11/20 3:36 下午
-     * @param $type
-     * @param $change
+     * @Date  : 2020/9/24 10:15 上午
+     * @param string $type
+     * @param int    $change
      */
-    public function setOrderStatus($type, $change)
+    public function setOrderStatus(string $type, int $change)
     {
         $status = sprintf('%04d', $this->status);
 
@@ -39,11 +39,11 @@ trait OrderHasAttributes
      * Notes: 获取订单分状态
      * 订单状态;金钱状态;发货状态;评论状态，
      * @Author: <C.Jason>
-     * @Date: 2019/11/20 3:37 下午
-     * @param $type
-     * @return int
+     * @Date  : 2020/9/24 10:15 上午
+     * @param string $type
+     * @return false|int|string
      */
-    public function getOrderStatus($type)
+    public function getOrderStatus(string $type)
     {
         $status = sprintf('%04d', $this->status);
 
@@ -66,7 +66,7 @@ trait OrderHasAttributes
     /**
      * Notes: 获取订单总金额，使用 bcmath 来确保运算精度
      * @Author: <C.Jason>
-     * @Date: 2019/11/20 3:37 下午
+     * @Date  : 2019/11/20 3:37 下午
      * @return string
      */
     public function getTotalAttribute(): string
@@ -78,7 +78,7 @@ trait OrderHasAttributes
      * Notes: 获取订单详细状态
      * 订单状态;金钱状态;发货状态;评论状态，
      * @Author: <C.Jason>
-     * @Date: 2019/11/20 3:37 下午
+     * @Date  : 2019/11/20 3:37 下午
      * @return string
      */
     protected function getStatusTextAttribute(): string
@@ -140,7 +140,7 @@ trait OrderHasAttributes
     /**
      * 获取订单状态 $this->state_text
      * @Author:<C.Jason>
-     * @Date:2018-10-19T10:56:24+0800
+     * @Date  :2018-10-19T10:56:24+0800
      * @return string
      */
     protected function getStateTextAttribute(): string

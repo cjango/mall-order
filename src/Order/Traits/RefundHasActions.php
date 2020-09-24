@@ -2,24 +2,24 @@
 
 namespace Jason\Order\Traits;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Jason\Order\Events\RefundAgreed;
 use Jason\Order\Events\RefundCompleted;
 use Jason\Order\Events\RefundProcessed;
 use Jason\Order\Events\RefundRefused;
+use Jason\Order\Exceptions\OrderException;
 use Jason\Order\Exceptions\RefundException;
 use Jason\Order\Models\Order;
 use Jason\Order\Models\Refund;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 trait RefundHasActions
 {
 
     /**
-     * 取消退款单，想办法变回原来的状态
-     * @Author:<C.Jason>
-     * @Date:2018-10-26T11:27:29+0800
-     * @return [type] [description]
+     * Notes: 取消退款单，想办法变回原来的状态
+     * @Author: <C.Jason>
+     * @Date  : 2020/9/24 10:16 上午
      */
     public function cancel()
     {
@@ -29,10 +29,10 @@ trait RefundHasActions
     }
 
     /**
-     * 同意退款
-     * @Author:<C.Jason>
-     * @Date:2018-10-23T14:39:04+0800
-     * @return RefundException|boolean
+     * Notes: 同意退款
+     * @Author: <C.Jason>
+     * @Date  : 2020/9/24 10:16 上午
+     * @return bool
      */
     public function agree()
     {
@@ -64,7 +64,7 @@ trait RefundHasActions
     /**
      * 拒绝退款
      * @Author:<C.Jason>
-     * @Date:2018-10-23T14:40:07+0800
+     * @Date  :2018-10-23T14:40:07+0800
      * @param string|null $remark 拒绝原因
      * @return RefundException|boolean
      */
@@ -89,7 +89,7 @@ trait RefundHasActions
     /**
      * 退货退款中
      * @Author:<C.Jason>
-     * @Date:2018-10-23T14:40:29+0800
+     * @Date  :2018-10-23T14:40:29+0800
      * @return RefundException|boolean
      */
     public function deliver($company = null, $number = null)
@@ -113,7 +113,7 @@ trait RefundHasActions
     /**
      * 确认收货
      * @Author:<C.Jason>
-     * @Date:2018-10-22T14:11:42+0800
+     * @Date  :2018-10-22T14:11:42+0800
      * @return OrderException|boolean
      */
     public function receive()
@@ -130,7 +130,7 @@ trait RefundHasActions
     /**
      * 未收到
      * @Author:<C.Jason>
-     * @Date:2018-10-22T14:11:42+0800
+     * @Date  :2018-10-22T14:11:42+0800
      * @return OrderException|boolean
      */
     public function unreceive()
@@ -147,7 +147,7 @@ trait RefundHasActions
     /**
      * 标记退款完成
      * @Author:<C.Jason>
-     * @Date:2018-10-23T14:40:36+0800
+     * @Date  :2018-10-23T14:40:36+0800
      * @return RefundException|boolean
      */
     public function complete()

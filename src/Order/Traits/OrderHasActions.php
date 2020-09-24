@@ -2,18 +2,18 @@
 
 namespace Jason\Order\Traits;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Jason\Order\Events\OrderCanceled;
 use Jason\Order\Events\OrderClosed;
 use Jason\Order\Events\OrderCompleted;
-use Jason\Order\Events\OrderDelaied;
+use Jason\Order\Events\OrderDelayed;
 use Jason\Order\Events\OrderDelivered;
 use Jason\Order\Events\OrderPaid;
 use Jason\Order\Events\OrderSignined;
 use Jason\Order\Events\OrderUnreceived;
 use Jason\Order\Exceptions\OrderException;
 use Jason\Order\Models\Order;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 trait OrderHasActions
 {
@@ -21,7 +21,7 @@ trait OrderHasActions
     /**
      * Notes: 订单审核
      * @Author: <C.Jason>
-     * @Date: 2019/11/20 3:34 下午
+     * @Date  : 2019/11/20 3:34 下午
      * @param bool $result
      * @return mixed
      */
@@ -47,7 +47,7 @@ trait OrderHasActions
     /**
      * Notes: 标记订单已支付状态
      * @Author: <C.Jason>
-     * @Date: 2019/11/20 3:42 下午
+     * @Date  : 2019/11/20 3:42 下午
      * @return bool
      */
     public function paid()
@@ -69,7 +69,7 @@ trait OrderHasActions
     /**
      * Notes: 取消订单
      * @Author: <C.Jason>
-     * @Date: 2019/11/20 3:42 下午
+     * @Date  : 2019/11/20 3:42 下午
      * @param int $channel
      * @return bool
      */
@@ -91,9 +91,9 @@ trait OrderHasActions
     /**
      * Notes: 标记发货处理中
      * @Author: <C.Jason>
-     * @Date: 2019/11/20 3:43 下午
+     * @Date  : 2019/11/20 3:43 下午
      */
-    public function delivering()
+    public function delivering(): void
     {
         if (!$this->canDeliver()) {
             throw new OrderException('订单状态不可发货');
@@ -106,14 +106,14 @@ trait OrderHasActions
     }
 
     /**
-     * 订单发货
-     * @Author:<C.Jason>
-     * @Date:2018-10-25T17:14:53+0800
-     * @param string|null $company 物流名称
-     * @param string|null $number 物流单号
-     * @return OrderException|boolean
+     * Notes: 订单发货
+     * @Author: <C.Jason>
+     * @Date  : 2020/9/24 10:17 上午
+     * @param string|null $company
+     * @param string|null $number
+     * @return bool
      */
-    public function deliver($company = null, $number = null)
+    public function deliver(string $company = null, string $number = null)
     {
         if (!$this->canDeliver()) {
             throw new OrderException('订单状态不可发货');
@@ -143,7 +143,7 @@ trait OrderHasActions
     /**
      * 签收订单
      * @Author:<C.Jason>
-     * @Date:2018-10-22T13:47:06+0800
+     * @Date  :2018-10-22T13:47:06+0800
      * @return OrderException|boolean
      */
     public function sign()
@@ -172,7 +172,7 @@ trait OrderHasActions
     /**
      * 延迟收货
      * @Author:<C.Jason>
-     * @Date:2018-10-22T14:09:15+0800
+     * @Date  :2018-10-22T14:09:15+0800
      * @return OrderException|boolean
      */
     public function delay()
@@ -184,7 +184,7 @@ trait OrderHasActions
         $this->setOrderStatus('deliver', 3);
         $this->save();
 
-        event(new OrderDelaied($this));
+        event(new OrderDelayed($this));
 
         return true;
     }
@@ -192,7 +192,7 @@ trait OrderHasActions
     /**
      * 未收到
      * @Author:<C.Jason>
-     * @Date:2018-10-22T14:11:42+0800
+     * @Date  :2018-10-22T14:11:42+0800
      * @return OrderException|boolean
      */
     public function unreceive()
@@ -212,7 +212,7 @@ trait OrderHasActions
     /**
      * 标记订单完成状态
      * @Author:<C.Jason>
-     * @Date:2018-10-25T17:28:01+0800
+     * @Date  :2018-10-25T17:28:01+0800
      * @return OrderException|boolean
      */
     public function complete()
@@ -233,7 +233,7 @@ trait OrderHasActions
     /**
      * 关闭订单
      * @Author:<C.Jason>
-     * @Date:2018-10-22T14:14:34+0800
+     * @Date  :2018-10-22T14:14:34+0800
      * @return OrderException|boolean
      */
     public function close()
@@ -251,20 +251,20 @@ trait OrderHasActions
         return true;
     }
 
-    /**
-     * 申请退款，创建退款单
-     * @Author:<C.Jason>
-     * @Date:2018-10-23T14:10:54+0800
-     * @param array $items 退款项目
-     * [
-     *     ['item_id' => integer, 'number' => integer],
-     *     ['item_id' => integer, 'number' => integer],
-     * ]
-     * @param float $total 申请退款金额
-     */
-    public function createRefund(array $items, float $total = null)
-    {
-        return \Refunds::create($order, $items, $total);
-    }
+    //    /**
+    //     * 申请退款，创建退款单
+    //     * @Author:<C.Jason>
+    //     * @Date:2018-10-23T14:10:54+0800
+    //     * @param array $items 退款项目
+    //     * [
+    //     *     ['item_id' => integer, 'number' => integer],
+    //     *     ['item_id' => integer, 'number' => integer],
+    //     * ]
+    //     * @param float $total 申请退款金额
+    //     */
+    //    public function createRefund(array $items, float $total = null)
+    //    {
+    //        return \Refunds::create($order, $items, $total);
+    //    }
 
 }

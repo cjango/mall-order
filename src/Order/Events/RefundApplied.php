@@ -2,6 +2,7 @@
 
 namespace Jason\Order\Events;
 
+use Illuminate\Queue\SerializesModels;
 use Jason\Order\Models\Order;
 use Jason\Order\Models\Refund;
 
@@ -10,6 +11,8 @@ use Jason\Order\Models\Refund;
  */
 class RefundApplied
 {
+
+    use SerializesModels;
 
     public $order;
 
@@ -20,4 +23,5 @@ class RefundApplied
         $this->order  = $order;
         $this->refund = $refund;
     }
+
 }

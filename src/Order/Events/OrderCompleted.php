@@ -2,17 +2,10 @@
 
 namespace Jason\Order\Events;
 
-use Jason\Order\Models\Order;
-
 /**
- * 订单完毕
+ * 订单完结事件
  */
-class OrderCompleted
+class OrderCompleted extends OrderEvent
 {
-    public $order;
 
-    public function __construct(Order $order)
-    {
-        $this->order = $order;
-    }
 }

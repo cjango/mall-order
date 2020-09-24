@@ -60,7 +60,7 @@ class Order extends Model
      * @Date  : 2019/11/20 1:43 下午
      * @return string
      */
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'orderid';
     }
