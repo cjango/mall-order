@@ -3,10 +3,9 @@
 namespace Jason\Order;
 
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
 use Jason\Order\Contracts\ShouldOrder;
 
-class Item implements Arrayable, Jsonable
+class Item implements Arrayable
 {
 
     public $qty;
