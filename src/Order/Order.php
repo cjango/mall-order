@@ -180,7 +180,13 @@ class Order
          * 创建订单子条目
          */
         foreach ($split as $item) {
+            // 库存校验
+            if ($item->qty > $item->model->getOrderableStock()) {
+                throw new OrderException(sprintf('[%s]库存不足', $item->model->getOrderableName()));
+            }
             $order->items()->create($item->toArray());
+            // 扣减库存
+            $item->model->deductStock($item->qty);
         }
 
         /**

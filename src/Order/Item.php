@@ -10,6 +10,8 @@ class Item implements Arrayable
 
     public $qty;
 
+    public $model;
+
     public $item_type;
 
     public $item_id;
@@ -25,6 +27,7 @@ class Item implements Arrayable
      */
     public function __construct(ShouldOrder $item, int $qty = 1)
     {
+        $this->model     = $item;
         $this->item_type = get_class($item);
         $this->item_id   = $item->getItemIdentifier();
         $this->seller_id = $item->getSellerIdentifier();

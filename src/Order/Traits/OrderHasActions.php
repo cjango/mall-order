@@ -85,6 +85,11 @@ trait OrderHasActions
 
         event(new OrderCanceled($this));
 
+        // 增加商品库存
+        foreach ($this->items as $item) {
+            $item->item->addStock($item->qty);
+        };
+
         return true;
     }
 
