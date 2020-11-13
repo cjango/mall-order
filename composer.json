@@ -10,10 +10,8 @@
     ],
     "require": {
         "php": ">=7.1.3",
-        "jasonc/address": "^1.0",
-        "laravel/framework": "*",
-        "nesbot/carbon": "^2.0",
-        "ext-json": "*"
+        "jasonc/address": "^2.0",
+        "laravel/framework": "*"
     },
     "autoload": {
         "psr-4": {
