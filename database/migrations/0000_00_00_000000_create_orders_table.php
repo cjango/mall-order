@@ -9,7 +9,6 @@ class CreateOrdersTable extends Migration
 
     /**
      * Run the migrations.
-     *
      * @return void
      */
     public function up()
@@ -17,7 +16,7 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('orderid', 32)->comment('订单编号');
-            $table->unsignedBigInteger('seller_id')->nullable()->comment('订单商户');
+            $table->morphs('sellerable')->nullable();;
             $table->unsignedBigInteger('user_id')->comment('下单用户');
             $table->unsignedDecimal('amount', 20, 2)->comment('订单金额');
             $table->unsignedDecimal('freight', 10, 2)->nullable()->comment('运费');
@@ -32,7 +31,6 @@ class CreateOrdersTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
      * @return void
      */
     public function down()

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Jason\Order\Traits\OrderCando;
@@ -100,14 +101,14 @@ class Order extends Model
     }
 
     /**
-     * Notes:
-     * @Author: <C.Jason>
-     * @Date  : 2019/11/20 1:51 下午
-     * @return BelongsTo
+     * Notes: 关联商家
+     * @Author: 玄尘
+     * @Date  : 2020/12/3 13:39
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function seller(): BelongsTo
+    public function seller(): MorphTo
     {
-        return $this->belongsTo(config('order.seller_model'))->withDefault();
+        return $this->morphTo();
     }
 
     /**

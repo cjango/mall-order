@@ -15,6 +15,13 @@ return [
         'prefix' => 'R',
     ],
 
+    //订单类型
+    'type'           => [
+        1 => '商品',
+        2 => '项目',
+        3 => '其他',
+    ],
+
     'user_model' => App\Models\User::class,
 
     'seller_model' => App\Models\User::class,
