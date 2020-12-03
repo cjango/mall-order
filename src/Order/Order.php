@@ -151,7 +151,7 @@ class Order
     protected function splitOrderBySeller()
     {
 
-        return $this->items->groupBy('sellerable_type', 'sellerable_id')->map(function ($items, $key) {
+        return $this->items->groupBy('orderby')->map(function ($items, $key) {
             /**
              * 计算分订单总价格
              */
@@ -169,7 +169,7 @@ class Order
              * 回传商户ID
              */
             $items->sellerable_id   = $items->first()->sellerable_id;
-            $items->sellerable_type = $key;
+            $items->sellerable_type = $items->first()->sellerable_type;
 
             return $items;
         });

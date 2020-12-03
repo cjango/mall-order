@@ -32,6 +32,7 @@ class Item implements Arrayable
         $this->item_id         = $item->getItemIdentifier();
         $this->sellerable_id   = $item->getSellerIdentifier();
         $this->sellerable_type = $item->getSellerTypeentifier();
+        $this->orderby         = $item->getSellerTypeentifier() . '_' . $item->getSellerIdentifier();
         $this->qty             = $qty;
         $this->price           = $item->getItemPrice();
     }
