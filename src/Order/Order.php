@@ -38,6 +38,8 @@ class Order
      */
     protected $remark;
 
+    protected $type;
+
     /**
      * Notes: 设置当前用户
      * @Author: <C.Jason>
@@ -68,6 +70,20 @@ class Order
     public function remark(string $remark)
     {
         $this->remark = $remark;
+
+        return $this;
+    }
+
+    /**
+     * Notes: 设置订单类型
+     * @Author: 玄尘
+     * @Date  : 2020/12/3 14:14
+     * @param $type
+     * @return $this
+     */
+    public function type($type)
+    {
+        $this->type = $type;
 
         return $this;
     }
@@ -134,7 +150,8 @@ class Order
      */
     protected function splitOrderBySeller()
     {
-        return $this->items->groupBy('seller_id')->map(function ($items, $key) {
+
+        return $this->items->groupBy('sellerable_type', 'sellerable_id')->map(function ($items, $key) {
             /**
              * 计算分订单总价格
              */
@@ -146,11 +163,13 @@ class Order
              */
             $items->qty = $items->reduce(function ($qty, $item) {
                 return $qty + $item->qty;
-            });;
+            });
+
             /**
              * 回传商户ID
              */
-            $items->seller_id = $key;
+            $items->sellerable_id   = $items->first()->sellerable_id;
+            $items->sellerable_type = $key;
 
             return $items;
         });
@@ -169,11 +188,13 @@ class Order
          * 创建主订单
          */
         $order = OrderModel::create([
-            'seller_id' => $split->seller_id,
-            'user_id'   => $this->user,
-            'amount'    => $split->amount,
-            'freight'   => 0,
-            'remark'    => $this->remark,
+            'sellerable_id'   => $split->sellerable_id,
+            'sellerable_type' => $split->sellerable_type,
+            'user_id'         => $this->user,
+            'amount'          => $split->amount,
+            'freight'         => 0,
+            'remark'          => $this->remark,
+            'type'            => $this->type,
         ]);
 
         /**

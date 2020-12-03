@@ -27,12 +27,13 @@ class Item implements Arrayable
      */
     public function __construct(ShouldOrder $item, int $qty = 1)
     {
-        $this->model     = $item;
-        $this->item_type = get_class($item);
-        $this->item_id   = $item->getItemIdentifier();
-        $this->seller_id = $item->getSellerIdentifier();
-        $this->qty       = $qty;
-        $this->price     = $item->getItemPrice();
+        $this->model           = $item;
+        $this->item_type       = get_class($item);
+        $this->item_id         = $item->getItemIdentifier();
+        $this->sellerable_id   = $item->getSellerIdentifier();
+        $this->sellerable_type = $item->getSellerTypeentifier();
+        $this->qty             = $qty;
+        $this->price           = $item->getItemPrice();
     }
 
     /**

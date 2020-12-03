@@ -16,7 +16,8 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('orderid', 32)->comment('订单编号');
-            $table->morphs('sellerable')->nullable();;
+            $table->morphs('sellerable');
+            $table->boolean('type')->comment('订单类型');
             $table->unsignedBigInteger('user_id')->comment('下单用户');
             $table->unsignedDecimal('amount', 20, 2)->comment('订单金额');
             $table->unsignedDecimal('freight', 10, 2)->nullable()->comment('运费');

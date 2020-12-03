@@ -54,6 +54,14 @@ interface ShouldOrder
     public function getSellerIdentifier();
 
     /**
+     * Notes: 获取卖家type
+     * @Author: <C.Jason>
+     * @Date  : 2020/9/23 3:55 下午
+     * @return mixed
+     */
+    public function getSellerTypeentifier();
+
+    /**
      * Notes: 获取商品主键
      * @Author: <C.Jason>
      * @Date  : 2020/9/23 3:57 下午

@@ -196,4 +196,14 @@ trait OrderHasAttributes
         return $state;
     }
 
+    /**
+     * Notes: 获取订单类型
+     * @Author: 玄尘
+     * @Date  : 2020/12/3 14:16
+     */
+    public function getTypeTextAttribute()
+    {
+        return config('order.types')[$this->type] ?? '未知';
+    }
+
 }
