@@ -109,4 +109,15 @@ class Refund extends Model
         return $state;
     }
 
+    /**
+     * Notes: 关联商家
+     * @Author: 玄尘
+     * @Date  : 2020/12/3 13:39
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function seller(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
 }

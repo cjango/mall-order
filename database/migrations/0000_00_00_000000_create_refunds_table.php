@@ -9,7 +9,6 @@ class CreateRefundsTable extends Migration
 
     /**
      * Run the migrations.
-     *
      * @return void
      */
     public function up()
@@ -18,7 +17,7 @@ class CreateRefundsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('order_id')->index()->comment('所属订单');
             $table->string('orderid', 32)->comment('退款单号');
-            $table->unsignedBigInteger('seller_id')->nullable()->comment('订单商户');
+            $table->morphs('sellerable');
             $table->unsignedBigInteger('user_id')->comment('下单用户');
             $table->unsignedDecimal('refund_total', 20, 2)->comment('申请退款金额');
             $table->unsignedDecimal('actual_total', 20, 2)->comment('实退金额');
@@ -32,7 +31,6 @@ class CreateRefundsTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
      * @return void
      */
     public function down()
