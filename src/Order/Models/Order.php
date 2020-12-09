@@ -105,7 +105,7 @@ class Order extends Model
      * @Date  : 2020/12/3 13:39
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function seller(): MorphTo
+    public function sellerable()
     {
         return $this->morphTo();
     }

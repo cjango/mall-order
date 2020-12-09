@@ -77,4 +77,12 @@ interface ShouldOrder
      */
     public function getItemPrice();
 
+    /**
+     * Notes: 获取商品规格名称
+     * @Author: 玄尘
+     * @Date  : 2020/12/7 16:30
+     * @return mixed
+     */
+    public function getItemValue();
+
 }

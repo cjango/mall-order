@@ -23,7 +23,7 @@ return [
     ],
 
     'user_model' => App\Models\User::class,
-    
+
     'admin_guard' => 'admin',
 
     /**
