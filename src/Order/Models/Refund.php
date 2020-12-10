@@ -78,6 +78,16 @@ class Refund extends Model
     }
 
     /**
+     * Notes: 退款记录
+     * @Author: 玄尘
+     * @Date  : 2020/12/10 9:48
+     */
+    public function logs()
+    {
+        return $this->hasMany(RefundLog::class);
+    }
+
+    /**
      * Notes: 获取退款状态
      * @Author: <C.Jason>
      * @Date  : 2019/11/22 4:25 下午

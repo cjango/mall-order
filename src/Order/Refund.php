@@ -5,9 +5,28 @@ namespace Jason\Order;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Jason\Order\Exceptions\OrderException;
 use Jason\Order\Models\Order;
+use Jason\Order\Models\Refund as RefundModel;
+use Jason\Order\Models\OrderItem;
+use Illuminate\Support\Facades\DB;
+use Jason\Order\Events\RefundApplied;
 
 class Refund
 {
+
+    /**
+     * @var int
+     */
+    protected $user;
+
+    /**
+     * @var string
+     */
+    protected $remark;
+
+    /**
+     * @var array
+     */
+    protected $logs;
 
     public function user($user)
     {
@@ -37,6 +56,19 @@ class Refund
     }
 
     /**
+     * Notes: 退款日志
+     * @Author: 玄尘
+     * @Date  : 2020/12/10 9:41
+     * @param $logs
+     */
+    public function logs($logs)
+    {
+        $this->logs = $logs;
+
+        return $this;
+    }
+
+    /**
      * Notes: 创建退款单
      * @Author: <C.Jason>
      * @Date  : 2019/11/22 4:34 下午
@@ -58,15 +90,20 @@ class Refund
         $refundItems = [];
         //判断最大可退数量
         foreach ($items as $item) {
-            $detail = OrderDetail::find($item['item_id']);
+
+            $detail = OrderItem::find($item['item_id']);
+
             if ($item['number'] <= 0) {
-                throw new OrderException('【' . $detail->item->getTitle() . '】退货数量必须大于0');
+                throw new OrderException('【' . $detail->item->getOrderableName() . '】退货数量必须大于0');
             }
-            if ($item['number'] > $detail->max_refund) {
-                throw new OrderException('【' . $detail->item->getTitle() . '】超过最大可退数量');
+
+            if ($item['number'] > $detail->qty) {
+                throw new OrderException('【' . $detail->item->getOrderableName() . '】超过最大可退数量');
             }
-            $maxAmount     += $detail->price * $item['number'];
-            $refundItems[] = new RefundItem(['detail' => $detail, 'number' => $item['number']]);
+
+            $maxAmount += $detail->price * $item['number'];
+
+            $refundItems[] = new RefundItem($detail, $item['number']);
         }
 
         // 自动计算退款金额
@@ -89,17 +126,36 @@ class Refund
             } else {
                 $order->setOrderStatus('pay', 3);
             }
+
             if (in_array($order->getOrderStatus('deliver'), [0, 1, 8])) {
                 $order->setOrderStatus('deliver', 6);
             }
+
             $order->state = Order::REFUND_APPLY;
             $order->save();
-            $refund = $order->refund()->create([
-                'refund_total' => $total,
-                'state'        => Refund::REFUND_APPLY,
+
+            $refund = $order->refunds()->create([
+                'refund_total'    => $total,
+                'actual_total'    => 0,
+                'user_id'         => $this->user,
+                'state'           => RefundModel::REFUND_APPLY,
+                'remark'          => $this->remark,
+                'sellerable_type' => $order->sellerable_type,
+                'sellerable_id'   => $order->sellerable_id,
             ]);
-            $refund->items()->saveMany($refundItems);
+
+            foreach ($refundItems as $item) {
+                $refund->items()->create($item->toArray());
+            }
+
+            if ($this->logs) {
+                $refund->logs()->create($this->logs);
+            }
+
             event(new RefundApplied($order, $refund));
+
+            return $refund;
+
         });
 
     }
