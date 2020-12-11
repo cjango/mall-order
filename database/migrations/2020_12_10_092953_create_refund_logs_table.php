@@ -16,10 +16,12 @@ class CreateRefundLogsTable extends Migration
         Schema::create('refund_logs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('refund_id');
+            $table->morphs('userable');
             $table->string('pictures')->nullable()->comment('图片');
             $table->string('title')->nullable()->comment('标题');
             $table->string('remark')->nullable()->comment('详情');
             $table->boolean('type')->default(1);
+            $table->string('state', 16)->comment('状态')->nullable();
             $table->timestamps();
         });
     }

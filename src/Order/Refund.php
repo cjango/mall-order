@@ -2,6 +2,7 @@
 
 namespace Jason\Order;
 
+use App\Models\User;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Jason\Order\Exceptions\OrderException;
 use Jason\Order\Models\Order;
@@ -28,15 +29,9 @@ class Refund
      */
     protected $logs;
 
-    public function user($user)
+    public function user(User $user)
     {
-        if ($user instanceof Authenticatable) {
-            $this->user = $user->getAuthIdentifier();
-        } elseif (is_numeric($user)) {
-            $this->user = $user;
-        } else {
-            throw new OrderException('非法用户');
-        }
+        $this->user = $user;
 
         return $this;
     }
@@ -137,7 +132,7 @@ class Refund
             $refund = $order->refunds()->create([
                 'refund_total'    => $total,
                 'actual_total'    => 0,
-                'user_id'         => $this->user,
+                'user_id'         => $this->user->id,
                 'state'           => RefundModel::REFUND_APPLY,
                 'remark'          => $this->remark,
                 'sellerable_type' => $order->sellerable_type,
@@ -148,9 +143,7 @@ class Refund
                 $refund->items()->create($item->toArray());
             }
 
-            if ($this->logs) {
-                $refund->logs()->create($this->logs);
-            }
+            $this->createLog($refund);
 
             event(new RefundApplied($order, $refund));
 
@@ -158,6 +151,25 @@ class Refund
 
         });
 
+    }
+
+    /**
+     * Notes: 添加日志
+     * @Author: 玄尘
+     * @Date  : 2020/12/11 11:43
+     * @param $refund
+     */
+    public function createLog($refund)
+    {
+        $logs = $this->logs;
+
+        if ($this->user) {
+            $logs['userable_type'] = get_class($this->user);
+            $logs['userable_id']   = $this->user->id;
+            $logs['state']         = $refund->state;
+        }
+
+        $refund->logs()->create($logs);
     }
 
 }

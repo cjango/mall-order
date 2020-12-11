@@ -2,6 +2,7 @@
 
 namespace Jason\Order\Models;
 
+use App\Models\Traits\BelongsToUser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,7 +15,7 @@ use Jason\Order\Utils\Helper;
 class Refund extends Model
 {
 
-    use RefundHasActions, RefundCando, SoftDeletes;
+    use RefundHasActions, RefundCando, SoftDeletes, BelongsToUser;
 
     const REFUND_APPLY     = 'REFUND_APPLY';     // 申请退款
     const REFUND_AGREE     = 'REFUND_AGREE';     // 同意退款
