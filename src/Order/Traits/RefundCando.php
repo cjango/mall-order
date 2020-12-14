@@ -11,7 +11,7 @@ trait RefundCando
     /**
      * Notes: 可同意退款
      * @Author: <C.Jason>
-     * @Date: 2019/11/22 4:29 下午
+     * @Date  : 2019/11/22 4:29 下午
      * @return bool
      */
     public function canAgree(): bool
@@ -26,7 +26,7 @@ trait RefundCando
     /**
      * Notes: 可以拒绝退款
      * @Author: <C.Jason>
-     * @Date: 2019/11/22 4:30 下午
+     * @Date  : 2019/11/22 4:30 下午
      * @return bool
      */
     public function canRefuse(): bool
@@ -37,7 +37,7 @@ trait RefundCando
     /**
      * Notes: 可以退货
      * @Author: <C.Jason>
-     * @Date: 2019/11/22 4:30 下午
+     * @Date  : 2019/11/22 4:30 下午
      * @return bool
      */
     public function canDeliver(): bool
@@ -52,7 +52,7 @@ trait RefundCando
     /**
      * Notes: 可以收货
      * @Author: <C.Jason>
-     * @Date: 2019/11/22 4:30 下午
+     * @Date  : 2019/11/22 4:30 下午
      * @return bool
      */
     public function canReceive(): bool
@@ -63,7 +63,7 @@ trait RefundCando
     /**
      * Notes: 可未收到
      * @Author: <C.Jason>
-     * @Date: 2019/11/22 4:31 下午
+     * @Date  : 2019/11/22 4:31 下午
      * @return bool
      */
     public function canUnreceive(): bool
@@ -75,7 +75,7 @@ trait RefundCando
      * Notes: 是否可以完成退款流程
      *        完成之后可以走退款接口了
      * @Author: <C.Jason>
-     * @Date: 2019/11/22 4:31 下午
+     * @Date  : 2019/11/22 4:31 下午
      * @return bool
      */
     public function canComplete(): bool
@@ -99,12 +99,22 @@ trait RefundCando
     /**
      * Notes: 是否可以取消退款单
      * @Author: <C.Jason>
-     * @Date: 2019/11/22 4:31 下午
+     * @Date  : 2019/11/22 4:31 下午
      * @return bool
      */
     public function canCancel(): bool
     {
         return true;
+    }
+
+    /**
+     * Notes: 是否可以退钱
+     * @Author: 玄尘
+     * @Date  : 2020/12/14 9:43
+     */
+    public function canMoneyBack()
+    {
+        return in_array($this->state, [Refund::REFUND_AGREE, Refund::REFUND_PROCESS]);
     }
 
 }

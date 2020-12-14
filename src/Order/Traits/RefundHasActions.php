@@ -2,6 +2,7 @@
 
 namespace Jason\Order\Traits;
 
+use App\Models\Traits\UserHasCompany;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Jason\Order\Events\RefundAgreed;
@@ -74,8 +75,8 @@ trait RefundHasActions
             throw new OrderException("退款单状态不可以拒绝退款");
         }
         DB::transaction(function () use ($remark) {
-            $this->state  = Refund::REFUND_REFUSE;
-            $this->remark = $remark;
+            $this->state = Refund::REFUND_REFUSE;
+            //            $this->remark = $remark;
             $this->save();
             $this->order->setOrderStatus('pay', 5);
             $this->order->state = Order::REFUND_REFUSE;
@@ -164,6 +165,56 @@ trait RefundHasActions
         });
 
         return true;
+    }
+
+    /**
+     * Notes: 退钱
+     * @Author: 玄尘
+     * @Date  : 2020/12/14 9:46
+     */
+    public function moneyBack()
+    {
+        $order = $this->order;
+
+        if (!$order) {
+            return '未找到关联订单';
+        }
+
+        $payment = $order->payemnt;
+        if (!$payment) {
+            return '未找到支付信息';
+        }
+
+        //微信支付
+        if ($payment->type == 1) {
+            $app = $order->sellerable->organization->initRefund();
+
+            $total        = $order->total * 100;
+            $actual_total = $this->actual_total * 100;
+            $trade_no     = $order->payment->trade_no;
+            $res          = $app->refund->byOutTradeNumber($trade_no, $order->orderid, $total, $actual_total);
+
+            if ($res->result_code == 'SUCCESS') {
+                $message           = true;
+                $this->state       = self::REFUND_COMPLETED;
+                $this->refunded_at = now();
+                $this->save();
+
+                $order->setOrderStatus('status', 9);
+                $order->setOrderStatus('pay', 7);
+                $order->state = Order::REFUND_COMPLETED;
+                $order->save();
+
+            } else {
+                if (isset($res->err_code_des)) {
+                    $message = $res->err_code_des;
+                } else {
+                    $message = $res->return_msg;
+                }
+            }
+
+            return $message;
+        }
     }
 
 }

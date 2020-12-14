@@ -2,6 +2,7 @@
 
 namespace Jason\Order\Models;
 
+use App\Models\Traits\HasPayment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -21,6 +22,7 @@ class Order extends Model
         OrderHasActions,
         OrderHasAttributes,
         OrderHasScopes,
+        HasPayment,
         SoftDeletes;
 
     const ORDER_INIT       = 'INIT';             // 订单初始化
