@@ -13,6 +13,7 @@ use Jason\Order\Events\OrderPaid;
 use Jason\Order\Events\OrderSignined;
 use Jason\Order\Events\OrderUnreceived;
 use Jason\Order\Exceptions\OrderException;
+use Jason\Order\Facades\Refund;
 use Jason\Order\Models\Order;
 
 trait OrderHasActions
@@ -256,20 +257,45 @@ trait OrderHasActions
         return true;
     }
 
-    //    /**
-    //     * 申请退款，创建退款单
-    //     * @Author:<C.Jason>
-    //     * @Date:2018-10-23T14:10:54+0800
-    //     * @param array $items 退款项目
-    //     * [
-    //     *     ['item_id' => integer, 'number' => integer],
-    //     *     ['item_id' => integer, 'number' => integer],
-    //     * ]
-    //     * @param float $total 申请退款金额
-    //     */
-    //    public function createRefund(array $items, float $total = null)
-    //    {
-    //        return \Refunds::create($order, $items, $total);
-    //    }
+    /**
+     * Notes: 申请退款，创建退款单
+     * @Author: 玄尘
+     * @Date  : 2020/12/14 13:09
+     * @param array      $user             发起的账户
+     * @param array      $items            退款项目
+     *                                     [
+     *                                     ['item_id' => integer, 'number' => integer],
+     *                                     ['item_id' => integer, 'number' => integer],
+     *                                     ]
+     * @param float|null $total            申请退款金额
+     * @param string     $remark           备注
+     * @param array      $logs             日志
+     *                                     [
+     *                                     'title'=>'退款标题',
+     *                                     'remark'=>'退款说明',
+     *                                     'type'=>'1',类型 1 退款 2 退货
+     *                                     'pictures'=>'图片 数组',
+     *                                     ]
+     * @return mixed
+     */
+    public function createRefund($user, $items = [], $total = null, $remark = '', $logs = [])
+    {
+        if (!$items) {
+            $data = $this->items->map(function ($item) {
+                return [
+                    'item_id' => $item->id,
+                    'number'  => $item->qty,
+                ];
+            });
+
+            $items = $data->toArray();
+        }
+
+        return Refund::user($user)
+                     ->remark('项目失败自动退款')
+                     ->logs($logs)
+                     ->create($this, $items, $total);
+
+    }
 
 }

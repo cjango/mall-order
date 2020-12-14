@@ -29,9 +29,15 @@ class Refund
      */
     protected $logs;
 
-    public function user(User $user)
+    protected $refund;
+
+    public function user($user)
     {
-        $this->user = $user;
+        if ($user instanceof Authenticatable) {
+            $this->user = $user;
+        } else {
+            throw new OrderException('非法用户');
+        }
 
         return $this;
     }
@@ -58,6 +64,10 @@ class Refund
      */
     public function logs($logs)
     {
+        if (!isset($logs['remark']) && !empty($this->remark)) {
+            $logs['remark'] = $this->remark;
+        }
+
         $this->logs = $logs;
 
         return $this;
@@ -129,7 +139,7 @@ class Refund
             $order->state = Order::REFUND_APPLY;
             $order->save();
 
-            $refund = $order->refunds()->create([
+            $this->refund = $order->refunds()->create([
                 'refund_total'    => $total,
                 'actual_total'    => 0,
                 'user_id'         => $this->user->id,
@@ -140,16 +150,16 @@ class Refund
             ]);
 
             foreach ($refundItems as $item) {
-                $refund->items()->create($item->toArray());
+                $this->refund->items()->create($item->toArray());
             }
 
-            $this->createLog($refund);
+            $this->createLog();
 
-            event(new RefundApplied($order, $refund));
-
-            return $refund;
+            event(new RefundApplied($order, $this->refund));
 
         });
+
+        return $this->refund;
 
     }
 
@@ -159,17 +169,17 @@ class Refund
      * @Date  : 2020/12/11 11:43
      * @param $refund
      */
-    public function createLog($refund)
+    public function createLog()
     {
         $logs = $this->logs;
 
         if ($this->user) {
             $logs['userable_type'] = get_class($this->user);
             $logs['userable_id']   = $this->user->id;
-            $logs['state']         = $refund->state;
+            $logs['state']         = $this->refund->state;
         }
 
-        $refund->logs()->create($logs);
+        $this->refund->logs()->create($logs);
     }
 
 }

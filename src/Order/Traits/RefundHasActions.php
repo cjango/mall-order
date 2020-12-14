@@ -177,12 +177,12 @@ trait RefundHasActions
         $order = $this->order;
 
         if (!$order) {
-            return '未找到关联订单';
+            throw new OrderException("未找到关联订单");
         }
 
         $payment = $order->payemnt;
         if (!$payment) {
-            return '未找到支付信息';
+            throw new OrderException("未找到支付信息");
         }
 
         //微信支付
@@ -195,7 +195,7 @@ trait RefundHasActions
             $res          = $app->refund->byOutTradeNumber($trade_no, $order->orderid, $total, $actual_total);
 
             if ($res->result_code == 'SUCCESS') {
-                $message           = true;
+
                 $this->state       = self::REFUND_COMPLETED;
                 $this->refunded_at = now();
                 $this->save();
@@ -205,15 +205,19 @@ trait RefundHasActions
                 $order->state = Order::REFUND_COMPLETED;
                 $order->save();
 
+                return true;
+
             } else {
                 if (isset($res->err_code_des)) {
                     $message = $res->err_code_des;
                 } else {
                     $message = $res->return_msg;
                 }
+                
+                throw new OrderException($message);
+
             }
 
-            return $message;
         }
     }
 
