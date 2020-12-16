@@ -131,4 +131,18 @@ class Refund extends Model
         return $this->morphTo();
     }
 
+    /**
+     * Notes: description
+     * @Author: 玄尘
+     * @Date  : 2020/12/16 11:35
+     * @param $query
+     * @param $seller
+     * @return mixed
+     */
+    public function scopeSellerable($query, $seller)
+    {
+        return $query->where('sellerable_type', get_class($seller))
+                     ->where('sellerable_id', $seller->id);
+    }
+
 }

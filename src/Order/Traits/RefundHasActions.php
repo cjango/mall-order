@@ -180,7 +180,8 @@ trait RefundHasActions
             throw new OrderException("未找到关联订单");
         }
 
-        $payment = $order->payemnt;
+        $payment = $order->payment;
+
         if (!$payment) {
             throw new OrderException("未找到支付信息");
         }
@@ -213,7 +214,7 @@ trait RefundHasActions
                 } else {
                     $message = $res->return_msg;
                 }
-                
+
                 throw new OrderException($message);
 
             }
