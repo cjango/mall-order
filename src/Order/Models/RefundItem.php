@@ -54,7 +54,12 @@ class RefundItem extends Model
      */
     public function item(): MorphTo
     {
-        return $this->morphTo();
+        $item = $this->morphTo();
+        if (!$item) {
+            $item = $this->morphTo()->withTrashed();
+        }
+
+        return $item;
     }
 
     /**

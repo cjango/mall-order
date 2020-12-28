@@ -21,12 +21,17 @@ class OrderItem extends Model
     /**
      * Notes: 所属商品
      * @Author: <C.Jason>
-     * @Date: 2019/11/21 1:08 下午
+     * @Date  : 2019/11/21 1:08 下午
      * @return MorphTo
      */
     public function item(): MorphTo
     {
-        return $this->morphTo();
+        $item = $this->morphTo();
+        if (!$item) {
+            $item = $this->morphTo()->withTrashed();
+        }
+
+        return $item;
     }
 
 }
