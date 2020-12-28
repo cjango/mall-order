@@ -125,21 +125,21 @@ class Order
 
         DB::beginTransaction();
 
-        try {
-            foreach ($splits as $split) {
-                $orders[] = $this->createOne($split);
-            }
-
-            DB::commit();
-            $result = new Collection($orders);
-
-            $result->total = $this->total();
-
-            return $result;
-        } catch (Exception $exception) {
-            DB::rollBack();
-            throw new OrderException($exception->getMessage());
+        //        try {
+        foreach ($splits as $split) {
+            $orders[] = $this->createOne($split);
         }
+
+        DB::commit();
+        $result = new Collection($orders);
+
+        $result->total = $this->total();
+
+        return $result;
+        //        } catch (Exception $exception) {
+        //            DB::rollBack();
+        //            throw new OrderException($exception->getMessage());
+        //        }
     }
 
     /**

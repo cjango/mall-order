@@ -126,7 +126,7 @@ class Refund extends Model
      * @Date  : 2020/12/3 13:39
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function seller(): MorphTo
+    public function sellerable(): MorphTo
     {
         return $this->morphTo();
     }
@@ -139,7 +139,7 @@ class Refund extends Model
      * @param $seller
      * @return mixed
      */
-    public function scopeSellerable($query, $seller)
+    public function scopeSeller($query, $seller)
     {
         return $query->where('sellerable_type', get_class($seller))
                      ->where('sellerable_id', $seller->id);

@@ -75,7 +75,7 @@ trait OrderHasScopes
      * @param $seller
      * @return mixed
      */
-    public function scopeSellerable($query, $seller)
+    public function scopeSeller($query, $seller)
     {
         return $query->where('sellerable_type', get_class($seller))
                      ->where('sellerable_id', $seller->id);

@@ -147,6 +147,7 @@ class Refund
                 'remark'          => $this->remark,
                 'sellerable_type' => $order->sellerable_type,
                 'sellerable_id'   => $order->sellerable_id,
+                'type'            => $order->type,
             ]);
 
             foreach ($refundItems as $item) {
