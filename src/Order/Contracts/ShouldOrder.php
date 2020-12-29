@@ -85,4 +85,12 @@ interface ShouldOrder
      */
     public function getItemValue();
 
+    /**
+     * Notes: 获取商品图片地址
+     * @Author: 玄尘
+     * @Date  : 2020/12/7 16:30
+     * @return mixed
+     */
+    public function getItemCover();
+
 }

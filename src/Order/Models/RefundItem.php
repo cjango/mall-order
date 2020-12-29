@@ -13,6 +13,10 @@ class RefundItem extends Model
 
     protected $guarded = [];
 
+    public    $casts   = [
+        'source' => 'json',
+    ];
+
     /**
      * Notes: 所属退款单
      * @Author: <C.Jason>
@@ -54,12 +58,8 @@ class RefundItem extends Model
      */
     public function item(): MorphTo
     {
-        $item = $this->morphTo();
-        if (!$item) {
-            $item = $this->morphTo()->withTrashed();
-        }
+        return $this->morphTo();
 
-        return $item;
     }
 
     /**

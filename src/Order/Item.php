@@ -61,6 +61,11 @@ class Item implements Arrayable
             'item_id'   => $this->item_id,
             'qty'       => $this->qty,
             'price'     => $this->price,
+            'source'    => [
+                'title' => $this->model->getOrderableName(),
+                'value' => $this->model->getItemValue(),
+                'cover' => $this->model->getItemCover(),
+            ],
         ];
     }
 

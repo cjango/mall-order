@@ -13,6 +13,10 @@ class OrderItem extends Model
 
     protected $guarded = [];
 
+    public    $casts   = [
+        'source' => 'json',
+    ];
+
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
@@ -26,12 +30,7 @@ class OrderItem extends Model
      */
     public function item(): MorphTo
     {
-        $item = $this->morphTo();
-        if (!$item) {
-            $item = $this->morphTo()->withTrashed();
-        }
-
-        return $item;
+        return $this->morphTo();
     }
 
 }

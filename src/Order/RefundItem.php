@@ -21,6 +21,8 @@ class RefundItem implements Arrayable, Jsonable
 
     public $order_id;
 
+    public $source;
+
     /**
      * Item constructor.
      * @param ShouldOrder $item
@@ -34,6 +36,7 @@ class RefundItem implements Arrayable, Jsonable
         $this->price         = $item->price;
         $this->order_id      = $item->order_id;
         $this->order_item_id = $item->id;
+        $this->source        = $item->source;
     }
 
     /**
@@ -62,6 +65,7 @@ class RefundItem implements Arrayable, Jsonable
             'price'         => $this->price,
             'order_id'      => $this->order_id,
             'order_item_id' => $this->order_item_id,
+            'source'        => $this->source,
         ];
     }
 
