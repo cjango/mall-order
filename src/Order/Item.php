@@ -25,7 +25,7 @@ class Item implements Arrayable
      * @param ShouldOrder $item 商品
      * @param int         $qty  数量
      */
-    public function __construct(ShouldOrder $item, int $qty = 1)
+    public function __construct(ShouldOrder $item, int $qty = 1, $source = null)
     {
         $this->model           = $item;
         $this->item_type       = get_class($item);
@@ -35,6 +35,7 @@ class Item implements Arrayable
         $this->orderby         = $item->getSellerTypeentifier() . '_' . $item->getSellerIdentifier();
         $this->qty             = $qty;
         $this->price           = $item->getItemPrice();
+        $this->source          = $source;
     }
 
     /**
@@ -61,11 +62,7 @@ class Item implements Arrayable
             'item_id'   => $this->item_id,
             'qty'       => $this->qty,
             'price'     => $this->price,
-            'source'    => [
-                'title' => $this->model->getOrderableName(),
-                'value' => $this->model->getItemValue(),
-                'cover' => $this->model->getItemCover(),
-            ],
+            'source'    => $this->source,
         ];
     }
 
