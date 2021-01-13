@@ -38,7 +38,15 @@ class Order
      */
     protected $remark;
 
+    /**
+     * @var int
+     */
     protected $type;
+
+    /**
+     * @var json
+     */
+    protected $subjoin;
 
     /**
      * Notes: 设置当前用户
@@ -64,12 +72,25 @@ class Order
      * Notes: 设置订单备注信息
      * @Author: <C.Jason>
      * @Date  : 2019/11/22 10:38 上午
-     * @param string $remark
+     * @param  string  $remark
      * @return $this
      */
     public function remark(string $remark)
     {
         $this->remark = $remark;
+
+        return $this;
+    }
+
+    /**
+     * Notes: 附加数据
+     * @Author: 玄尘
+     * @Date  : 2021/1/13 13:27
+     * @param $subjoin
+     */
+    public function subjoin(array $subjoin)
+    {
+        $this->subjoin = $subjoin;
 
         return $this;
     }
@@ -92,7 +113,7 @@ class Order
      * Notes: 设置订单收货地址
      * @Author: <C.Jason>
      * @Date  : 2019/11/22 10:40 上午
-     * @param Addressbook $address
+     * @param  Addressbook  $address
      * @return $this
      */
     public function address(Addressbook $address)
@@ -106,7 +127,7 @@ class Order
      * Notes: 创建订单
      * @Author: <C.Jason>
      * @Date  : 2019/11/21 10:42 上午
-     * @param array $items
+     * @param  array  $items
      * @return \Illuminate\Support\Collection
      */
     public function create(array $items)
@@ -179,7 +200,7 @@ class Order
      * Notes: 创建一条订单记录
      * @Author: <C.Jason>
      * @Date  : 2019/11/22 10:23 上午
-     * @param \Illuminate\Support\Collection $split
+     * @param  \Illuminate\Support\Collection  $split
      * @return \Jason\Order\Models\Order
      */
     protected function createOne(Collection $split)
@@ -195,6 +216,7 @@ class Order
             'freight'         => 0,
             'remark'          => $this->remark,
             'type'            => $this->type,
+            'subjoin'         => $this->subjoin,
         ]);
 
         /**
@@ -251,14 +273,15 @@ class Order
      */
     protected function setOrderAddress($order, $address)
     {
-        $order->express()->create([
-            'name'        => $address->getName(),
-            'mobile'      => $address->getMobile(),
-            'province_id' => $address->getProvinceId(),
-            'city_id'     => $address->getCityId(),
-            'district_id' => $address->getDistrictId(),
-            'address'     => $address->getAddress(),
-        ]);
+        $order->express()
+              ->create([
+                  'name'        => $address->getName(),
+                  'mobile'      => $address->getMobile(),
+                  'province_id' => $address->getProvinceId(),
+                  'city_id'     => $address->getCityId(),
+                  'district_id' => $address->getDistrictId(),
+                  'address'     => $address->getAddress(),
+              ]);
     }
 
     /**
@@ -282,7 +305,7 @@ class Order
      * Notes: 获取订单详情
      * @Author: <C.Jason>
      * @Date  : 2019/11/22 1:51 下午
-     * @param string $orderid
+     * @param  string  $orderid
      * @return \Jason\Order\Models\Order
      */
     public function get(string $orderid)

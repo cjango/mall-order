@@ -56,6 +56,10 @@ class Order extends Model
         'paid_at',
     ];
 
+    protected $casts = [
+        'subjoin' => 'json',
+    ];
+
     /**
      * Notes: 路由查询主键
      * @Author: <C.Jason>
