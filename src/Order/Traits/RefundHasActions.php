@@ -17,6 +17,22 @@ use Jason\Order\Models\Refund;
 trait RefundHasActions
 {
 
+    public $app;
+
+    /**
+     * Notes: 设置支付信息
+     * @Author: 玄尘
+     * @Date  : 2021/1/13 15:32
+     * @param $app
+     * @return $this
+     */
+    public function setApp($app)
+    {
+        $this->app = $app;
+
+        return $this;
+    }
+
     /**
      * Notes: 取消退款单，想办法变回原来的状态
      * @Author: <C.Jason>
@@ -66,7 +82,7 @@ trait RefundHasActions
      * 拒绝退款
      * @Author:<C.Jason>
      * @Date  :2018-10-23T14:40:07+0800
-     * @param string|null $remark 拒绝原因
+     * @param  string|null  $remark  拒绝原因
      * @return RefundException|boolean
      */
     public function refuse(string $remark = null)
@@ -186,14 +202,17 @@ trait RefundHasActions
             throw new OrderException("未找到支付信息");
         }
 
+        if (!$this->app) {
+            throw new OrderException("缺少退款配置");
+        }
+
         //微信支付
         if ($payment->type == 1) {
-            $app = $order->sellerable->organization->initRefund();
 
             $total        = $order->total * 100;
             $actual_total = $this->actual_total * 100;
             $trade_no     = $order->payment->trade_no;
-            $res          = $app->refund->byOutTradeNumber($trade_no, $order->orderid, $total, $actual_total);
+            $res          = $this->app->refund->byOutTradeNumber($trade_no, $order->orderid, $total, $actual_total);
 
             if ($res->result_code == 'SUCCESS') {
 
