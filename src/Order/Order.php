@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Jason\Address\Contracts\Addressbook;
 use Jason\Order\Exceptions\OrderException;
 use Jason\Order\Models\Order as OrderModel;
+use Jason\Order\Events\OrderCreated;
 
 class Order
 {
@@ -245,6 +246,8 @@ class Order
         if (config('order.auto_audit')) {
             $order->audit();
         }
+
+        event(new OrderCreated($order));
 
         return $order;
     }
