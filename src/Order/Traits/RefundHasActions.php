@@ -209,8 +209,8 @@ trait RefundHasActions
         //微信支付
         if ($payment->type == 1) {
 
-            $total        = $order->total * 100;
-            $actual_total = $this->actual_total * 100;
+            $total        = $order->payment->amount * 100;//支付的金额
+            $actual_total = $this->actual_total * 100;    //退款的金额
             $trade_no     = $order->payment->trade_no;
             $res          = $this->app->refund->byOutTradeNumber($trade_no, $order->orderid, $total, $actual_total);
 
