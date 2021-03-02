@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangePicturesToRefundLogsTable extends Migration
+class AddBonusAndSettleToOrdersTable extends Migration
 {
 
     /**
@@ -13,8 +13,9 @@ class ChangePicturesToRefundLogsTable extends Migration
      */
     public function up()
     {
-        Schema::table('refund_logs', function (Blueprint $table) {
-            $table->json('pictures')->change();
+        Schema::table('orders', function (Blueprint $table) {
+            $table->tinyInteger('bonus')->default(0)->comment('分润状态')->after('subjoin');
+            $table->tinyInteger('settle')->default(0)->comment('结算状态')->after('bonus');
         });
     }
 
@@ -24,7 +25,7 @@ class ChangePicturesToRefundLogsTable extends Migration
      */
     public function down()
     {
-        Schema::table('refund_logs', function (Blueprint $table) {
+        Schema::table('orders', function (Blueprint $table) {
             //
         });
     }

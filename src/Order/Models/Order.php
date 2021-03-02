@@ -44,6 +44,24 @@ class Order extends Model
     const CANCEL_SELLER = 3; // 卖家取消
     const CANCEL_SYSTEM = 4; // 系统取消
 
+    const BONUS_INIT    = 0;//未分润
+    const BONUS_FROZEN  = 1;//待发放
+    const BONUS_SUCCESS = 2;//已发放
+
+    const BONUSES = [
+        self::BONUS_INIT    => '未分润',
+        self::BONUS_FROZEN  => '待发放',
+        self::BONUS_SUCCESS => '已发放',
+    ];
+
+    const SETTLE_INIT    = 0;//待结算
+    const SETTLE_SUCCESS = 1;//已结算
+
+    const SETTLES = [
+        self::SETTLE_INIT    => '待结算',
+        self::SETTLE_SUCCESS => '已结算',
+    ];
+
     /**
      * @var array
      */
