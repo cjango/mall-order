@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Jason\Order\Traits\OrderCando;
@@ -129,7 +130,7 @@ class Order extends Model
      * @Date  : 2020/12/3 13:39
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function sellerable()
+    public function sellerable(): MorphTo
     {
         return $this->morphTo();
     }

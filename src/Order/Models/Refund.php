@@ -2,7 +2,6 @@
 
 namespace Jason\Order\Models;
 
-use App\Models\Traits\BelongsToUser;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -11,11 +10,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Jason\Order\Traits\RefundCando;
 use Jason\Order\Traits\RefundHasActions;
 use Jason\Order\Utils\Helper;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Refund extends Model
 {
 
-    use RefundHasActions, RefundCando, SoftDeletes, BelongsToUser;
+    use RefundHasActions, RefundCando, SoftDeletes;
 
     const REFUND_APPLY     = 'REFUND_APPLY';     // 申请退款
     const REFUND_AGREE     = 'REFUND_AGREE';     // 同意退款
@@ -41,8 +41,20 @@ class Refund extends Model
 
         self::creating(function ($model) {
             $model->state   = self::REFUND_APPLY;
-            $model->orderid = Helper::orderid(config('order.refund_orderid.length'), config('order.refund_orderid.prefix'));
+            $model->orderid = Helper::orderid(config('order.refund_orderid.length'),
+                config('order.refund_orderid.prefix'));
         });
+    }
+
+    /**
+     * Notes: 关联所属用户
+     * @Author: <C.Jason>
+     * @Date  : 2019/11/20 1:51 下午
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(config('order.user_model'))->withDefault();
     }
 
     /**
